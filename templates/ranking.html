@@ -5,22 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ranking MoneyRats</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Estilo para compatibilidade e correção do erro de sintaxe do VS Code */
+        .progress-bar {
+            width: var(--p);
+            transition: width 0.7s ease-in-out;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white p-8 font-sans min-h-screen">
+<body class="bg-gray-900 text-white p-4 md:p-8 font-sans min-h-screen">
     <div class="max-w-4xl mx-auto">
         
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-between items-center mb-8 bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-xl">
             <div>
-                <h1 class="text-3xl font-bold text-green-500 italic">{{ grupo.nome }}</h1>
-                <p class="text-gray-500 text-xs uppercase tracking-widest font-bold">Ranking de Poupança</p>
+                <h1 class="text-3xl font-black text-green-500 italic uppercase tracking-tighter">{{ grupo.nome }}</h1>
+                <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">🏆 Ranking de Ratões</p>
             </div>
             
             {% if usuario_logado and usuario_logado.id == grupo.criador_id %}
             <a href="/editar-grupo/{{ grupo.id }}" 
-               class="bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition-all border border-gray-700 shadow-lg group"
+               class="bg-gray-700 hover:bg-gray-600 p-3 rounded-xl transition-all border border-gray-600 group"
                title="Configurações do Grupo">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 group-hover:text-green-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 group-hover:text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -28,47 +34,39 @@
             {% endif %}
         </div>
 
-        <div class="max-w-md mx-auto mb-6">
-            {% if grupo.data_fim < agora %}
-                <div class="bg-red-600/20 border border-red-500 p-4 rounded-xl text-center shadow-lg">
-                    <h2 class="text-xl font-bold text-red-500 italic text-[14px]">🚨 DESAFIO ENCERRADO!</h2>
-                </div>
-            {% else %}
-                <div class="bg-blue-900/20 border border-blue-500/30 p-3 rounded-xl text-center shadow-md">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-bold">O desafio termina em:</p>
-                    <p class="text-lg font-bold text-blue-400">{{ grupo.data_fim.strftime('%d/%m/%Y') }}</p>
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
+        <div class="bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-700">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-700/50 text-green-400 border-b border-gray-700 font-bold uppercase text-xs">
+                <thead class="bg-gray-900/50 text-gray-500 border-b border-gray-700 text-[10px] font-black uppercase">
                     <tr>
-                        <th class="p-4 text-center w-20">#</th>
-                        <th class="p-4">Rat (Usuário)</th>
-                        <th class="p-4">Esforço</th>
-                        <th class="p-4 text-right">Desempenho</th>
+                        <th class="p-6 text-center w-24">Posição</th>
+                        <th class="p-6">Nome</th>
+                        <th class="p-6">Progresso</th>
+                        <th class="p-6 text-right">Economia</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-700">
                     {% for usuario in usuarios %}
-                    <tr class="hover:bg-gray-750 transition-colors {% if loop.index == 1 %} bg-green-900/10 {% endif %}">
-                        <td class="p-4 text-center font-mono text-gray-400 text-lg">
-                            {% if loop.index == 1 %} 🥇 {% elif loop.index == 2 %} 🥈 {% elif loop.index == 3 %} 🥉 {% else %} {{ loop.index }}º {% endif %}
+                    <tr class="hover:bg-gray-750 transition-colors {% if loop.index == 1 %} bg-green-500/5 {% endif %}">
+                        <td class="p-6 text-center text-xl">
+                            {% if loop.index == 1 %} 🥇 {% elif loop.index == 2 %} 🥈 {% elif loop.index == 3 %} 🥉 {% else %} <span class="text-gray-600 font-mono">{{ loop.index }}º</span> {% endif %}
                         </td>
-                        <td class="p-4 font-bold text-gray-100">{{ usuario.nome }}</td>
-                        <td class="p-4">
-                            <div class="w-full bg-gray-900 rounded-full h-2.5 border border-gray-700 overflow-hidden">
-                                <div class="h-full rounded-full transition-all duration-700 bg-green-500" 
-                                     style="--p: {{ [usuario.esforco, 100]|min }}%; width: var(--p);">
+                        <td class="p-6">
+                            <span class="font-bold text-gray-100 block">{{ usuario.nome }}</span>
+                            {% if usuario.id == usuario_logado.id %}
+                                <span class="text-[10px] bg-green-600/20 text-green-500 px-2 py-0.5 rounded-md uppercase">Você</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-6">
+                            <div class="w-full bg-gray-900 rounded-full h-3 border border-gray-700 overflow-hidden">
+                                <div class="h-full rounded-full bg-green-500 progress-bar" 
+                                     style="--p: {{ [usuario.esforco, 100]|min }}%;">
                                 </div>
                             </div>
                         </td>
-                        <td class="p-4 text-right">
+                        <td class="p-6 text-right">
                             <div class="flex flex-col">
-                                <span class="text-blue-400 font-mono font-bold text-lg">{{ usuario.esforco }}%</span>
-                                <span class="text-gray-500 text-[10px] font-mono">R$ {{ "%.2f"|format(usuario.total_poupado) }}</span>
+                                <span class="text-green-500 font-black text-xl leading-tight">{{ usuario.esforco }}%</span>
+                                <span class="text-gray-500 text-[11px] font-mono">R$ {{ "%.2f"|format(usuario.total_poupado) }}</span>
                             </div>
                         </td>
                     </tr>
@@ -77,10 +75,9 @@
             </table>
         </div>
 
-        <div class="mt-10 text-center">
-            <a href="/dashboard" class="inline-flex items-center text-green-500 hover:text-green-400 font-bold transition-all hover:translate-x-[-4px]">
-                <span class="mr-2">←</span> Voltar ao Meu Dashboard
-            </a>
+        <div class="mt-8 flex justify-center gap-6">
+            <a href="/dashboard" class="text-gray-500 hover:text-white font-bold text-sm transition-colors">← Dashboard</a>
+            <a href="/logout" class="text-red-500/50 hover:text-red-500 font-bold text-sm transition-colors">Sair da Conta</a>
         </div>
     </div>
 </body>
