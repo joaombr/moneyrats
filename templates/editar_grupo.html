@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Editar Grupo - MoneyRats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8 font-sans">
+    <div class="max-w-md mx-auto bg-gray-800 p-8 rounded-2xl border border-gray-700 shadow-2xl">
+        <h1 class="text-2xl font-bold text-green-500 mb-6 italic">Configurações do Grupo</h1>
+        
+        <form action="/salvar-edicao-grupo/{{ grupo.id }}" method="post" class="space-y-4">
+            <div>
+                <label class="block text-xs uppercase text-gray-500 font-bold mb-1">Nome do Grupo</label>
+                <input type="text" name="nome" value="{{ grupo.nome }}" required
+                       class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white focus:border-green-500 outline-none">
+            </div>
+
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-colors">
+                    Salvar Alterações
+                </button>
+                <a href="/ranking" class="block text-center text-gray-500 text-sm mt-4 hover:text-white">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

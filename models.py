@@ -9,6 +9,7 @@ class Grupo(Base):
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String, unique=True)
     codigo_convite = Column(String, unique=True, default=lambda: str(uuid.uuid4())[:8])
+    criador_id = Column(Integer, ForeignKey("usuarios.id"))
     data_criacao = Column(DateTime, default=datetime.utcnow)
     data_fim = Column(DateTime) # Define o fim do desafio (ex: 6 meses)
     
