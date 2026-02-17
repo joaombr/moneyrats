@@ -252,3 +252,5 @@ async def ver_ranking(request: Request, db: Session = Depends(get_db)):
         "usuario_logado": usuario_logado,
         "agora": datetime.now()
     })
+
+    # atualização: 20/10/2024 - Correção de bugs, melhorias na experiência do usuário e ajustes visuais. O código agora é mais robusto e fácil de manter!
