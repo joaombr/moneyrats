@@ -5,114 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - MoneyRats</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .card-glass {
-            background: rgba(31, 41, 55, 0.6);
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(75, 85, 99, 0.3);
-        }
-        .rat-shadow {
-            filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.3));
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-gray-900 text-white font-sans min-h-screen p-4 md:p-8">
+<body class="bg-gray-900 text-white font-sans min-h-screen">
 
-    <div class="max-w-5xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-            <div>
-                <h1 class="text-3xl font-black text-white italic uppercase leading-none tracking-tighter">
-                    E aí, <span class="text-green-500">{{ usuario.nome }}</span>!
-                </h1>
-                <p class="text-gray-500 text-[10px] font-black mt-1 uppercase tracking-[0.2em]">Painel do Ratão Investidor</p>
-            </div>
-            <a href="/logout" class="bg-gray-800 hover:bg-red-900/30 text-red-500 px-6 py-2 rounded-xl text-[10px] font-black border border-red-900/50 transition-all uppercase">
-                Sair da Conta
-            </a>
+    <nav class="bg-gray-800 p-4 border-b border-green-500/30 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-green-500">🐀 Olá, {{ usuario.nome }}!</h1>
+            <a href="/" class="text-sm bg-red-600/20 text-red-400 px-3 py-1 rounded hover:bg-red-600/40 transition font-bold">Sair</a>
         </div>
+    </nav>
 
-        <div class="grid md:grid-cols-3 gap-6">
+    <main class="container mx-auto mt-10 p-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <section class="glass-card p-8 rounded-3xl shadow-2xl border border-gray-800">
+            <h2 class="text-2xl font-bold mb-6 text-green-400">Meu Progresso Individual</h2>
             
-            <div class="card-glass p-8 rounded-[2.5rem] flex flex-col items-center text-center shadow-2xl">
-                <div class="w-24 h-24 bg-green-500 rounded-full mb-6 flex items-center justify-center text-4xl rat-shadow border-4 border-gray-900">
-                    🐀
+            <div class="space-y-6">
+                <div class="bg-gray-900/50 p-4 rounded-2xl border border-gray-700">
+                    <div class="flex justify-between text-xs text-gray-500 uppercase font-bold mb-1">
+                        <span>Salário Base</span>
+                        <span>Total Poupado</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-mono">
+                        <span>R$ {{ usuario.salario }}</span>
+                        <span class="text-green-500">R$ {{ usuario.total_poupado }}</span>
+                    </div>
                 </div>
-                <h2 class="text-2xl font-black mb-1 tracking-tight">{{ usuario.nome }}</h2>
-                <p class="text-gray-500 text-xs mb-8 uppercase font-bold tracking-widest">{{ usuario.email }}</p>
                 
-                <div class="w-full bg-gray-950 p-6 rounded-3xl border border-gray-800 shadow-inner">
-                    <p class="text-[9px] text-gray-500 uppercase font-black mb-1 tracking-widest">Total na Toca</p>
-                    <p class="text-3xl font-black text-green-500">R$ {{ "%.2f"|format(usuario.total_poupado) }}</p>
+                <div class="py-6 text-center">
+                    <p class="text-gray-400 text-xs mb-2 uppercase tracking-widest font-bold">Seu Esforço Real</p>
+                    <span class="text-6xl font-black text-green-500">
+                        {{ (usuario.total_poupado / usuario.salario * 100)|round(1) if usuario.salario > 0 else 0 }}%
+                    </span>
                 </div>
+
+                <form action="/lancar-economia" method="post" class="space-y-4">
+                    <input type="hidden" name="email" value="{{ usuario.email }}">
+                    <div>
+                        <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Novo Aporte (R$)</label>
+                        <input type="number" name="valor" step="0.01" placeholder="Quanto guardou hoje?" required 
+                               class="w-full p-4 rounded-xl bg-gray-800 border border-gray-700 outline-none focus:border-green-500 transition font-mono">
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 p-4 rounded-xl font-bold hover:bg-green-500 transition shadow-lg">
+                        Atualizar Minha Economia 💰
+                    </button>
+                </form>
             </div>
+        </section>
 
-            <div class="md:col-span-2 space-y-6">
+        <section class="space-y-8">
+            
+            {% if usuario.grupo %}
+            <div class="glass-card p-8 rounded-3xl border border-purple-500/30 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-purple-600 px-4 py-1 rounded-bl-xl text-[10px] font-bold uppercase">Meu Grupo</div>
                 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="card-glass p-8 rounded-[2.5rem] border-t-4 border-t-green-500 shadow-xl">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="bg-green-500/20 p-2 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-black italic uppercase tracking-tighter">Novo Grupo</h3>
-                        </div>
-                        <form action="/criar-grupo" method="post" class="space-y-4">
-                            <input type="text" name="nome" placeholder="Ex: Viagem 2026" required
-                                   class="w-full bg-gray-950 border border-gray-800 rounded-2xl p-4 text-sm focus:border-green-500 outline-none transition-all placeholder:text-gray-700">
-                            <button type="submit" class="w-full bg-green-600 hover:bg-green-500 py-4 rounded-2xl font-black text-xs transition-all uppercase tracking-widest shadow-lg shadow-green-900/20">
-                                Fundar Grupo
-                            </button>
-                        </form>
+                <h2 class="text-2xl font-bold text-white mb-2">{{ usuario.grupo.nome }}</h2>
+                <div class="flex items-center space-x-2 mb-6">
+                    <span class="text-xs text-gray-400 uppercase font-bold">Código:</span>
+                    <span class="bg-gray-700 text-purple-400 px-3 py-1 rounded-lg font-mono font-bold select-all cursor-pointer" title="Clique para copiar">
+                        {{ usuario.grupo.codigo_convite }}
+                    </span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-gray-900/50 p-3 rounded-xl border border-gray-700 text-center">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">Início</p>
+                        <p class="text-sm font-bold">{{ usuario.grupo.data_criacao.strftime('%d/%m/%Y') if usuario.grupo.data_criacao else '--/--/--' }}</p>
                     </div>
-
-                    <div class="card-glass p-8 rounded-[2.5rem] border-t-4 border-t-blue-500 shadow-xl">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="bg-blue-500/20 p-2 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-black italic uppercase tracking-tighter">Entrar</h3>
-                        </div>
-                        <form action="/entrar-grupo" method="post" class="space-y-4">
-                            <input type="text" name="codigo" placeholder="Código Convite" required
-                                   class="w-full bg-gray-950 border border-gray-800 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none transition-all placeholder:text-gray-700">
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black text-xs transition-all uppercase tracking-widest shadow-lg shadow-blue-900/20">
-                                Participar
-                            </button>
-                        </form>
+                    <div class="bg-gray-900/50 p-3 rounded-xl border border-gray-700 text-center">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">Expira em</p>
+                        <p class="text-sm font-bold text-blue-400">{{ usuario.grupo.data_fim.strftime('%d/%m/%Y') if usuario.grupo.data_fim else 'Sem prazo' }}</p>
                     </div>
                 </div>
 
-                <a href="/ranking" class="card-glass p-8 rounded-[2.5rem] flex items-center justify-between group cursor-pointer hover:bg-gray-800/40 transition-all border border-gray-700/50 shadow-2xl">
-                    <div class="flex items-center gap-6">
-                        <div class="bg-yellow-500/10 p-4 rounded-2xl border border-yellow-500/20">
-                            <span class="text-3xl">🏆</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-black italic uppercase tracking-tighter group-hover:text-green-500 transition-colors">Ver Ranking Geral</h3>
-                            <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Quem está liderando a economia?</p>
-                        </div>
-                    </div>
-                    <div class="bg-gray-900 p-4 rounded-2xl group-hover:translate-x-2 transition-transform shadow-xl border border-gray-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                    </div>
+                <a href="/ranking/grupo/{{ usuario.grupo.id }}" class="block text-center bg-purple-600 p-4 rounded-xl font-bold hover:bg-purple-500 transition shadow-lg">
+                    Acessar Ranking do Grupo 🏆
                 </a>
+            </div>
+            {% else %}
+            
+            <div class="glass-card p-8 rounded-3xl border border-gray-800 shadow-2xl space-y-8">
+                
+                <div>
+                    <h2 class="text-xl font-bold text-blue-400 mb-4 flex items-center">
+                        <span class="mr-2">👑</span> Criar Novo Desafio
+                    </h2>
+                    <form action="/criar-grupo" method="post" class="space-y-4">
+                        <input type="text" name="nome_grupo" placeholder="Nome do Grupo" required 
+                               class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 outline-none focus:border-blue-500">
+                        
+                        <div class="flex items-center space-x-3">
+                            <label for="duracao" class="text-sm text-gray-400 font-bold">Duração:</label>
+                            <select name="meses" id="duracao" title="Selecione a duração do desafio" 
+                                    class="bg-gray-800 border border-gray-700 p-2 rounded-lg outline-none focus:border-blue-500 text-sm">
+                                <option value="1">1 Mês</option>
+                                <option value="3">3 Meses</option>
+                                <option value="6" selected>6 Meses</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 p-3 rounded-xl font-bold hover:bg-blue-500 transition">
+                            Fundar Grupo e Liderar
+                        </button>
+                    </form>
+                </div>
+
+                <div class="border-t border-gray-700 pt-8">
+                    <h2 class="text-xl font-bold text-yellow-500 mb-4 flex items-center">
+                        <span class="mr-2">🔑</span> Entrar com Convite
+                    </h2>
+                    <form action="/entrar-grupo" method="post" class="space-y-4">
+                        <input type="text" name="codigo" placeholder="Cole o código aqui" required 
+                               class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 outline-none focus:border-yellow-500 transition font-mono uppercase">
+                        <button type="submit" class="w-full bg-yellow-600 p-3 rounded-xl font-bold hover:bg-yellow-500 transition text-gray-900">
+                            Participar do Desafio
+                        </button>
+                    </form>
+                </div>
 
             </div>
-        </div>
+            {% endif %}
 
-        <div class="mt-16 pt-8 border-t border-gray-800/50 text-center">
-            <p class="text-gray-600 text-[9px] font-black uppercase tracking-[0.4em]">
-                MoneyRats • ADS Megaprojeto • 2026
-            </p>
-        </div>
-    </div>
+        </section>
+    </main>
+
+    <footer class="mt-16 text-center text-gray-600 text-xs pb-10">
+        MoneyRats Engine v2.0
+    </footer>
 
 </body>
 </html>
