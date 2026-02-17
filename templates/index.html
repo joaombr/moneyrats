@@ -3,96 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoneyRats - Login & Cadastro</title>
+    <title>MoneyRats - Entrada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .glass {
             background: rgba(31, 41, 55, 0.7);
-            -webkit-backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Correção Safari */
             backdrop-filter: blur(10px);
             border: 1px solid rgba(75, 85, 99, 0.3);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white font-sans min-h-screen flex items-center justify-center p-6">
-
-    <div class="max-w-4xl w-full grid md:grid-cols-2 gap-8 items-center">
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full glass p-8 rounded-3xl shadow-2xl">
+        <h1 class="text-4xl font-black text-green-500 italic mb-8 text-center">MONEYRATS</h1>
         
-        <div class="text-center md:text-left space-y-4">
-            <h1 class="text-5xl font-black text-green-500 italic tracking-tighter">MONEYRATS</h1>
-            <p class="text-xl text-gray-400 font-medium">Transforme suas economias em um <span class="text-white">Mega Projeto</span> com seus amigos.</p>
-            <div class="hidden md:block pt-4">
-                <div class="inline-block bg-green-900/20 text-green-400 px-4 py-2 rounded-full border border-green-500/30 text-sm font-bold">
-                    🚀 Online no Render
-                </div>
-            </div>
-        </div>
+        <form action="/login" method="post" class="space-y-4 mb-8">
+            <input type="email" name="email" placeholder="E-mail" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 outline-none focus:border-green-500">
+            <input type="password" name="senha" placeholder="Senha" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 outline-none focus:border-green-500">
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-500 py-4 rounded-xl font-black uppercase">Entrar</button>
+        </form>
 
-        <div class="glass p-8 rounded-3xl shadow-2xl">
-            
-            <div class="flex mb-8 bg-gray-900/50 p-1 rounded-xl">
-                <button onclick="showTab('login')" id="btn-login" class="flex-1 py-2 rounded-lg font-bold text-sm transition-all bg-green-600 text-white">LOGIN</button>
-                <button onclick="showTab('cadastro')" id="btn-cadastro" class="flex-1 py-2 rounded-lg font-bold text-sm transition-all text-gray-400 hover:text-white">CADASTRO</button>
-            </div>
-
-            <form id="form-login" action="/login" method="post" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">E-mail</label>
-                    <input type="email" name="email" required class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 outline-none focus:border-green-500 transition-all">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Senha</label>
-                    <input type="password" name="senha" required class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 outline-none focus:border-green-500 transition-all">
-                </div>
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-500 py-4 rounded-xl font-black text-white transition-transform active:scale-95 shadow-lg shadow-green-900/20">
-                    ENTRAR NA TOCOIRA
-                </button>
+        <div class="border-t border-gray-800 pt-6">
+            <p class="text-center text-gray-500 text-[10px] mb-4 font-black uppercase">Ainda não é um ratão?</p>
+            <form action="/cadastrar" method="post" class="space-y-4">
+                <input type="text" name="nome" placeholder="Nome" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 outline-none focus:border-blue-500">
+                <input type="email" name="email" placeholder="E-mail" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 outline-none focus:border-blue-500">
+                <input type="password" name="senha" placeholder="Senha" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 outline-none focus:border-blue-500">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-black uppercase">Cadastrar</button>
             </form>
-
-            <form id="form-cadastro" action="/cadastrar" method="post" class="space-y-4 hidden">
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nome de Ratão</label>
-                    <input type="text" name="nome" required class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 outline-none focus:border-green-500 transition-all">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">E-mail</label>
-                    <input type="email" name="email" required class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 outline-none focus:border-green-500 transition-all">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Crie uma Senha</label>
-                    <input type="password" name="senha" required class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 outline-none focus:border-green-500 transition-all">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-black text-white transition-transform active:scale-95 shadow-lg shadow-blue-900/20">
-                    CRIAR MINHA CONTA
-                </button>
-            </form>
-
         </div>
     </div>
-
-    <script>
-        function showTab(type) {
-            const loginForm = document.getElementById('form-login');
-            const cadastroForm = document.getElementById('form-cadastro');
-            const btnLogin = document.getElementById('btn-login');
-            const btnCadastro = document.getElementById('btn-cadastro');
-
-            if (type === 'login') {
-                loginForm.classList.remove('hidden');
-                cadastroForm.classList.add('hidden');
-                btnLogin.classList.add('bg-green-600', 'text-white');
-                btnLogin.classList.remove('text-gray-400');
-                btnCadastro.classList.remove('bg-green-600', 'text-white');
-                btnCadastro.classList.add('text-gray-400');
-            } else {
-                loginForm.classList.add('hidden');
-                cadastroForm.classList.remove('hidden');
-                btnCadastro.classList.add('bg-blue-600', 'text-white');
-                btnCadastro.classList.remove('text-gray-400');
-                btnLogin.classList.remove('bg-green-600', 'text-white');
-                btnLogin.classList.add('text-gray-400');
-            }
-        }
-    </script>
 </body>
 </html>
