@@ -1,19 +1,7 @@
-from datetime import datetime
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from database import Base
-import uuid
-
-class Grupo(Base):
-    __tablename__ = "grupos"
-    id = Column(Integer, primary_key=True, index=True)
-    nome = Column(String, unique=True)
-    codigo_convite = Column(String, unique=True, default=lambda: str(uuid.uuid4())[:8])
-    criador_id = Column(Integer, ForeignKey("usuarios.id"))
-    data_criacao = Column(DateTime, default=datetime.utcnow)
-    data_fim = Column(DateTime) # Define o fim do desafio (ex: 6 meses)
-    
-    usuarios = relationship("Usuario", back_populates="grupo")
+from datetime import datetime
 
 class Usuario(Base):
     __tablename__ = "usuarios"
@@ -21,9 +9,23 @@ class Usuario(Base):
     nome = Column(String)
     email = Column(String, unique=True, index=True)
     senha = Column(String)
-    salario = Column(Float, default=0.0) # NOVO
+    salario = Column(Float, default=0.0)
+    esforco = Column(Integer, default=0)
     total_poupado = Column(Float, default=0.0)
     
-    # Ligação com o Grupo
-    grupo_id = Column(Integer, ForeignKey("grupos.id"), nullable=True)
-    grupo = relationship("Grupo", back_populates="usuarios")
+    # Define a qual grupo o usuário pertence
+    grupo_id = Column(Integer, ForeignKey("grupos.id"))
+
+class Grupo(Base):
+    __tablename__ = "grupos"
+    id = Column(Integer, primary_key=True, index=True)
+    nome = Column(String)
+    codigo_convite = Column(String, unique=True, index=True)
+    data_fim = Column(DateTime, default=datetime.now)
+    
+    # Define quem é o dono do grupo
+    criador_id = Column(Integer, ForeignKey("usuarios.id"))
+    
+    # Relacionamentos explícitos para evitar erros de ambiguidade
+    usuarios = relationship("Usuario", foreign_keys=[Usuario.grupo_id])
+    criador = relationship("Usuario", foreign_keys=[criador_id])
