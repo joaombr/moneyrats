@@ -1,0 +1,33 @@
+/* Efeito de vidro para os cards */
+.glass-card {
+    background: rgba(31, 41, 55, 0.7);
+    -webkit-backdrop-filter: blur(10px); /* Adicione esta linha para o Safari */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+/* Previne que a barra de progresso desapareça se o valor for inválido */
+.progress-fill {
+    min-width: 2px;
+    transition: width 0.7s ease-in-out;
+}
+
+/* Animação suave para as barras de progresso */
+.transition-all {
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estilização da scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #111827;
+}
+::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+}
